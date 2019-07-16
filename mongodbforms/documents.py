@@ -3,6 +3,7 @@ import itertools
 from collections import Callable, OrderedDict
 from functools import reduce
 
+import logging
 from django.forms.forms import (BaseForm, DeclarativeFieldsMetaclass,
                                 NON_FIELD_ERRORS, pretty_name)
 from django.forms.widgets import media_property
@@ -329,7 +330,9 @@ class DocumentFormMetaclass(DeclarativeFieldsMetaclass):
                 message = 'Unknown field(s) (%s) specified for %s'
                 message = message % (', '.join(missing_fields),
                                      opts.model.__name__)
-                raise FieldError(message)
+                #raise FieldError(message)
+                logging.getLogger("mongodb.form").error(message)
+
             # Override default model fields with any custom declared ones
             # (plus, include all the other declared fields).
             fields.update(new_class.declared_fields)
